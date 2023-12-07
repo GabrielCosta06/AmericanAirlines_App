@@ -8,7 +8,7 @@ export default function Background({ placeholderImageSource }) {
 
 const styles = StyleSheet.create({
   image: {
-    marginTop: 50,
+    marginTop: 130,
   }
 
 });

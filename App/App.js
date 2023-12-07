@@ -1,20 +1,30 @@
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, TextInput, View, Text, Switch } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import Button from "./components/Button";
 import Background from "./components/Background";
 import Logo from "./components/Logo";
-import RoundButtonWithIcon from "./components/roundButton";
+import RoundButtonWithPersonIcon from "./components/roundButtonPerson";
+import RoundButtonWithArrowIcon from "./components/roundButtonArrow";
 
 const PlaceholderImage = require("./assets/background.jpg");
 const LogoPlaceholder = require("./assets/Logo.png");
 
-export default function App({ navigation }) {
+const PASSWORD_CONTAINER_PADDING = 30;
+
+export default function App() {
   const [isEnabled, setIsEnabled] = useState(false);
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const toggleSwitch = () => {
     setIsEnabled((previousState) => !previousState);
+  };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -34,8 +44,29 @@ export default function App({ navigation }) {
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Password</Text>
-          <TextInput style={styles.input} secureTextEntry />
+          <View
+            style={[
+              styles.passwordInputContainer,
+              password !== "" && { paddingRight: PASSWORD_CONTAINER_PADDING },
+            ]}
+          >
+            <TextInput
+              style={styles.input}
+              secureTextEntry={!showPassword}
+              value={password}
+              onChangeText={setPassword}
+            />
+            {password !== "" && (
+              <MaterialCommunityIcons
+                name={showPassword ? "eye-off" : "eye"}
+                size={20}
+                color="#1994fe"
+                onPress={toggleShowPassword}
+              />
+            )}
+          </View>
         </View>
+
         <View style={styles.switchContainer}>
           <Text style={styles.switchLabel}>Keep me logged in</Text>
           <Switch
@@ -50,11 +81,61 @@ export default function App({ navigation }) {
           <Button label="Log in" />
         </View>
       </View>
-      <View>
-        <RoundButtonWithIcon />
-        <Text style={{ marginTop: -250, marginLeft: 15, fontWeight: '600', color: 'white', fontSize: 17}}>Join AAdvantage <Text style={{fontSize: 12  }}>®</Text></Text>
+      <View style={{ flexDirection: "row" }}>
+        <View>
+          <RoundButtonWithPersonIcon />
+          <Text
+            style={{
+              marginTop: -250,
+              marginLeft: 15,
+              fontWeight: "500",
+              color: "white",
+              fontSize: 17,
+            }}
+          >
+            Join AAdvantage <Text style={{ fontSize: 12 }}>®</Text>
+          </Text>
+        </View>
+        <View style={{ marginLeft: "12%" }}>
+          <RoundButtonWithArrowIcon />
+          <Text
+            style={{
+              marginTop: -250,
+              marginLeft: 20,
+              fontWeight: "500",
+              color: "white",
+              fontSize: 17,
+            }}
+          >
+            Continue as guest
+          </Text>
+        </View>
       </View>
-      <StatusBar style="auto" />
+      <View>
+        <Text
+          style={{
+            marginTop: -265,
+            marginLeft: "15%",
+            color: "white",
+            fontSize: 15,
+          }}
+        >
+          Need AAdvantage number or password?
+        </Text>
+      </View>
+      <View>
+        <Text
+          style={{
+            marginTop: -228,
+            marginLeft: "40%",
+            color: "white",
+            fontSize: 15,
+          }}
+        >
+          Privacy policy
+        </Text>
+      </View>
+      <StatusBar style="light" />
     </View>
   );
 }
@@ -83,11 +164,10 @@ const styles = StyleSheet.create({
     height: 50,
     width: "100%",
     marginBottom: 20,
-    fontSize: 18,
+    fontSize: 16,
     color: "#fff",
     borderBottomWidth: 1,
     borderBottomColor: "#444444",
-    paddingHorizontal: 10,
   },
   buttonSignIn: {
     backgroundColor: "#1994fe",
@@ -116,5 +196,9 @@ const styles = StyleSheet.create({
     marginRight: 165,
     fontSize: 14,
     color: "#8d8d8d",
+  },
+  passwordInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
